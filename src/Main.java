@@ -10,21 +10,20 @@ public class Main {
         System.out.println(checkLog(Arrays.asList(finder)));
     }
 
-    public static List<Data> checkLog (List<String> input){
-        List<Data> results = new ArrayList<>();
+    public static Map<String,Integer> checkLog (List<String> input){
+        Map<String,Integer> results = new HashMap<>();
         input.forEach(data ->{
-            Data newData = new Data(data,0);
-            results.add(newData);
+            results.put(data, 0);
         });
         try (Stream<String> stream = Files.lines(Paths.get("src/log.log"))) {
             stream.forEach(lines -> {
                 input.forEach(data ->{
                     if (lines.contains(data)){
-                        results.forEach(result ->{
-                            if (result.getName().equals(data)){
-                                result.setCount(result.getCount()+1);
+                        for (String key : results.keySet()) {
+                            if (key.equals(data)){
+                                results.put(key, results.get(key)+1);
                             }
-                        });
+                        }
                     }
                 });
             });
